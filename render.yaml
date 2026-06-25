@@ -1,0 +1,30 @@
+# Render deployment manifest for HRMS project
+# Frontend: Vite React app
+# Backend: Express API server
+
+services:
+  - type: web
+    name: hrms-backend
+    env: node
+    plan: free
+    branch: main
+    buildCommand: "cd backend && npm install"
+    startCommand: "cd backend && npm start"
+    envVars:
+      - key: MONGODB_URI
+        fromDatabase: hrms-mongo
+      - key: JWT_SECRET
+        value: "your_jwt_secret_here"
+      - key: FRONTEND_URL
+        value: "https://hrms-frontend.onrender.com"
+
+  - type: web
+    name: hrms-frontend
+    env: node
+    plan: free
+    branch: main
+    buildCommand: "cd frontend && npm install && npm run build"
+    startCommand: "cd frontend && npm run preview -- --host 0.0.0.0 --port 10000"
+    envVars:
+      - key: VITE_API_URL
+        value: "https://hrms-backend.onrender.com/api"
