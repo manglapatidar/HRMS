@@ -2,21 +2,21 @@
 # Single service: Express backend serves the built frontend
 
 services:
-  - type: web
+  - type: web_service
     name: hrms
     env: node
     plan: free
     branch: main
     buildCommand: "cd backend && npm install && cd ../frontend && npm install && npm run build"
-    startCommand: "cd backend && npm install && npm start"
+    startCommand: "cd backend && npm start"
     envVars:
       - key: MONGODB_URI
-        fromDatabase: hrms-mongo
+        value: "YOUR_MONGODB_URI"
       - key: JWT_SECRET
-        value: "your_jwt_secret_here"
+        value: "YOUR_JWT_SECRET"
       - key: JWT_REFRESH_SECRET
-        value: "your_jwt_refresh_secret_here"
+        value: "YOUR_JWT_REFRESH_SECRET"
       - key: FRONTEND_URL
-        value: "https://hrms.onrender.com"
+        value: "https://your-app.onrender.com"
       - key: VITE_API_URL
         value: "/api"
