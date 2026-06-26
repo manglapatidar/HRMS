@@ -5,6 +5,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const path = require('path');
+const fs = require('fs');
 
 const { errorHandler } = require('./middleware/errorHandler');
 
@@ -46,6 +47,18 @@ app.use('/api/shifts', require('./routes/shiftRoutes'));
 app.use('/api/holidays', require('./routes/holidayRoutes'));
 app.use('/api/reports', require('./routes/reportRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
+
+// Serve frontend static files when available
+const frontendBuildPath = path.join(__dirname, '..', 'frontend', 'dist');
+if (fs.existsSync(frontendBuildPath)) {
+  app.use(express.static(frontendBuildPath));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) {
+      return next();
+    }
+    res.sendFile(path.join(frontendBuildPath, 'index.html'));
+  });
+}
 
 // Error Handler Middleware
 app.use(errorHandler);
