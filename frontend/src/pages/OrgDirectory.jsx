@@ -31,7 +31,6 @@ const OrgDirectory = () => {
       if (filters.designationId) params.append('designationId', filters.designationId);
       if (filters.locationId) params.append('locationId', filters.locationId);
       if (filters.showExited) params.append('status', 'Exited,Active,On Probation');
-      else params.append('status', 'Active,On Probation');
 
       const res = await api.get(`/org/employees?${params.toString()}`);
       setEmployees(res.data.employees || []);

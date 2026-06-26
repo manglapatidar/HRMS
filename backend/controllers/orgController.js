@@ -35,7 +35,11 @@ const getEmployees = async (req, res, next) => {
     if (req.query.locationId) query.locationId = req.query.locationId;
     
     if (req.query.status) {
-      query.status = req.query.status;
+      const statuses = Array.isArray(req.query.status)
+        ? req.query.status.flatMap(item => item.split(',').map(status => status.trim()))
+        : req.query.status.split(',').map(status => status.trim());
+      const cleanStatuses = statuses.filter(Boolean);
+      query.status = cleanStatuses.length === 1 ? cleanStatuses[0] : { $in: cleanStatuses };
     } else {
       query.status = { $ne: 'Exited' };
     }
