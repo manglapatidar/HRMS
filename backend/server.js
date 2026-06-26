@@ -52,7 +52,7 @@ app.use('/api/notifications', require('./routes/notificationRoutes'));
 const frontendBuildPath = path.join(__dirname, '..', 'frontend', 'dist');
 if (fs.existsSync(frontendBuildPath)) {
   app.use(express.static(frontendBuildPath));
-  app.get('*', (req, res, next) => {
+  app.get(/.*/, (req, res, next) => {
     if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) {
       return next();
     }
